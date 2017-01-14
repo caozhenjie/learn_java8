@@ -1,0 +1,9 @@
+当你编译你的Android工程时，ButterKnife工程中ButterKnifeProcessor类的process()方法会执行以下操作：
+
+开始它会扫描Java代码中所有的ButterKnife注解@Bind、@OnClick、@OnItemClicked等
+当它发现一个类中含有任何一个注解时，ButterKnifeProcessor会帮你生成一个Java类，名字类似<className>$$ViewBinder，这个新生成的类实现了ViewBinder<T>接口
+这个ViewBinder类中包含了所有对应的代码，比如@Bind注解对应findViewById(), @OnClick对应了view.setOnClickListener()等等
+最后当Activity启动ButterKnife.bind(this)执行时，ButterKnife会去加载对应的ViewBinder类调用它们的bind()方法
+
+
+由于处理器是javac的工具，因此我们必须将我们自己的处理器注册到javac中，在以前我们需要提供一个.jar文件，打包你的注解处理器到此文件中，并在在你的jar中，需要打包一个特定的文件 javax.annotation.processing.Processor到META-INF/services路径下 把MyProcessor.jar放到你的builpath中，javac会自动检查和读取javax.annotation.processing.Processor中的内容，并且注册MyProcessor作为注解处理器。
